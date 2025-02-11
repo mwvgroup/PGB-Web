@@ -24,6 +24,12 @@
       ],
       "~services/*": [
         "app/common/services*"
+      ],
+      "~layouts/*": [
+        "app/layouts/*"
+      ],
+      "~pages/*": [
+        "app/pages/*"
       ]
     }
   },
