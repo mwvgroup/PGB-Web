@@ -1,8 +1,12 @@
 import { Component } from "@angular/core";
+import { ContentSectionComponent } from "../../common/components/content-section/content-section.component";
 
 /** A simple placeholder page. */
 @Component({
   selector: "landing-page",
-  template: "Hello World!",
+  templateUrl: "hello-page.component.html",
+  imports: [
+    ContentSectionComponent
+  ]
 })
 export class HelloPageComponent {}
