@@ -21,6 +21,9 @@
     "paths": {
       "~environments/*": [
         "environments/*"
+      ],
+      "~services/*": [
+        "app/common/services*"
       ]
     }
   },
