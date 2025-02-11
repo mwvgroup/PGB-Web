@@ -23,7 +23,7 @@
         "environments/*"
       ],
       "~services/*": [
-        "app/common/services*"
+        "app/common/services/*"
       ],
       "~layouts/*": [
         "app/layouts/*"

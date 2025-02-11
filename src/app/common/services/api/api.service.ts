@@ -17,7 +17,7 @@ import { RequestOptions } from "./api.interface";
 export class APIService {
 
   /** The API URL without any trailing slashes. */
-  private baseUrl: string = environment.apiBaseUrl.replace(/\/$/, "");
+  private baseUrl: string = environment.apiUrl.replace(/\/$/, "");
 
   constructor(private http: HttpClient) {}
 
