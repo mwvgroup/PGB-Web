@@ -25,6 +25,9 @@
       "~services/*": [
         "app/common/services/*"
       ],
+      "~components/*": [
+        "app/common/components/*"
+      ],
       "~layouts/*": [
         "app/layouts/*"
       ],

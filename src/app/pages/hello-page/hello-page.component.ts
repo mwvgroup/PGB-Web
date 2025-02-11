@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { ContentSectionComponent } from "../../common/components/content-section/content-section.component";
+
+import { ContentSectionComponent } from "~components/content-section/content-section.component";
 
 /** A simple placeholder page. */
 @Component({
