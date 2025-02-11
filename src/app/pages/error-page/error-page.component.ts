@@ -8,7 +8,6 @@ import { Component, OnInit } from "@angular/core";
  * error code.
  */
 @Component({
-  standalone: true,
   selector: "app-error-page",
   templateUrl: "error-page.component.html"
 })
