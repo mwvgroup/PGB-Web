@@ -11,6 +11,7 @@ import { AppMeta } from "./metadata.interface";
   providedIn: "root"
 })
 export class MetadataService {
+
   // Define API endpoints and cache for API results
   private apiEndpoint: string = "meta/app";
   private apiCache$!: Observable<AppMeta>;
