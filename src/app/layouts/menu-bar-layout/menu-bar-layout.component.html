@@ -1,0 +1,15 @@
+<header>
+  <mat-toolbar>
+    <span class="logo-text" routerLink="/">PG Broker</span>
+  </mat-toolbar>
+</header>
+
+<main class="main-content">
+  <router-outlet/>
+</main>
+
+<footer class="footer">
+  @if (version) {
+    <span>version {{ version }}</span>
+  }
+</footer>
