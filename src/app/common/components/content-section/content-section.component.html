@@ -1,3 +1,11 @@
 <div class="section-wrapper">
-  <ng-content/>
+  <!-- Projected title -->
+  <div class="section-title">
+    <ng-content select="[section-title]"></ng-content>
+  </div>
+
+  <!-- Projected body -->
+  <div class="section-body">
+    <ng-content select="[section-body]"></ng-content>
+  </div>
 </div>

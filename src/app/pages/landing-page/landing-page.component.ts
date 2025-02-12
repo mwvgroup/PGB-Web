@@ -8,7 +8,7 @@ import { HeroSectionComponent } from "~components/hero-section/hero-section.comp
   templateUrl: "landing-page.component.html",
   imports: [
     ContentSectionComponent,
-    HeroSectionComponent
+    HeroSectionComponent,
   ],
 })
 export class LandingPageComponent {}
