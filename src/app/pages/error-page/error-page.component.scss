@@ -1,0 +1,24 @@
+.center-content {
+  align-items:     center;
+  display:         flex;
+  flex-direction:  column;
+  height:          100vh;
+  justify-content: center;
+  width:           100vw;
+}
+
+h1 {
+  font-size:     115px;
+  font-weight:   500;
+  margin-bottom: 0;
+}
+
+h1 .error-code {
+  color:       var(--mat-sys-error);
+  font-weight: 700;
+}
+
+h2 {
+  font-size:   22px;
+  font-weight: 400;
+}

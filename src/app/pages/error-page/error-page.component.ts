@@ -9,7 +9,8 @@ import { Component, OnInit } from "@angular/core";
  */
 @Component({
   selector: "app-error-page",
-  templateUrl: "error-page.component.html"
+  templateUrl: "error-page.component.html",
+  styleUrl: "error-page.component.scss"
 })
 export class ErrorPageComponent implements OnInit {
   protected errorCode!: number;

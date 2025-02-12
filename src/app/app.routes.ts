@@ -1,7 +1,7 @@
 import { Routes } from "@angular/router";
 
 // Layout Components
-import { CenterLayoutComponent } from "~layouts/center-layout/center-layout.component";
+import { BlankLayoutComponent } from "~layouts/blank-layout/blank-layout.component";
 import { MenuBarLayoutComponent } from "~layouts/menu-bar-layout/menu-bar-layout.component";
 
 // Page Components
@@ -17,7 +17,7 @@ export const routes: Routes = [
     ],
   },
   {
-    path: "**", component: CenterLayoutComponent,
+    path: "**", component: BlankLayoutComponent,
     children: [
       {path: "", component: ErrorPageComponent},
     ],
