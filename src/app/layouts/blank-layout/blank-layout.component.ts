@@ -3,7 +3,7 @@ import { RouterOutlet } from "@angular/router";
 
 /** Minimal layout component with no custom styling or wrappers. */
 @Component({
-  imports: [RouterOutlet],
   template: "<router-outlet/>",
+  imports: [RouterOutlet],
 })
 export class BlankLayoutComponent {}

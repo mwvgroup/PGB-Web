@@ -5,7 +5,6 @@ import { MetadataService } from "~services/metadata/metadata.service";
 
 /** Page layout with a navigation toolbar and page footer. */
 @Component({
-  selector: "app-menu-bar-layout",
   templateUrl: "menu-bar-layout.component.html",
   styleUrl: "menu-bar-layout.component.scss",
   imports: [

@@ -7,6 +7,6 @@ import { ContentSectionComponent } from "~components/content-section/content-sec
   templateUrl: "landing-page.component.html",
   imports: [
     ContentSectionComponent
-  ]
+  ],
 })
 export class LandingPageComponent {}
