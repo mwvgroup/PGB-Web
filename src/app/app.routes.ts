@@ -6,7 +6,7 @@ import { MenuBarLayoutComponent } from "~layouts/menu-bar-layout/menu-bar-layout
 
 // Page Components
 import { ErrorPageComponent } from "~pages/error-page/error-page.component";
-import { LandingPageComponent } from "~pages/hello-page/landing-page.component";
+import { LandingPageComponent } from "~pages/landing-page/landing-page.component";
 
 export const routes: Routes = [
   {
