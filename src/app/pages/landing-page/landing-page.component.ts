@@ -4,10 +4,9 @@ import { ContentSectionComponent } from "~components/content-section/content-sec
 
 /** A simple placeholder page. */
 @Component({
-  selector: "landing-page",
-  templateUrl: "hello-page.component.html",
+  templateUrl: "landing-page.component.html",
   imports: [
     ContentSectionComponent
   ]
 })
-export class HelloPageComponent {}
+export class LandingPageComponent {}

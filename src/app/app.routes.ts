@@ -6,14 +6,14 @@ import { MenuBarLayoutComponent } from "~layouts/menu-bar-layout/menu-bar-layout
 
 // Page Components
 import { ErrorPageComponent } from "~pages/error-page/error-page.component";
-import { HelloPageComponent } from "~pages/hello-page/hello-page.component";
+import { LandingPageComponent } from "~pages/hello-page/landing-page.component";
 
 export const routes: Routes = [
   {
     path: "",
     component: MenuBarLayoutComponent,
     children: [
-      {path: "", component: HelloPageComponent}
+      {path: "", component: LandingPageComponent}
     ],
   },
   {
