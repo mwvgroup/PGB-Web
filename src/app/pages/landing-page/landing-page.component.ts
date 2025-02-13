@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 
 import { ContentSectionComponent } from "~components/content-section/content-section.component";
+import { DatasetFormComponent } from "~components/dataset-form/dataset-form.component";
 import { FeatureCardComponent } from "~components/feature-card/feature-card.component";
 import { HeroSectionComponent } from "~components/hero-section/hero-section.component";
 
@@ -15,6 +16,7 @@ import { HeroSectionComponent } from "~components/hero-section/hero-section.comp
     ContentSectionComponent,
     FeatureCardComponent,
     HeroSectionComponent,
+    DatasetFormComponent,
   ],
 })
 export class LandingPageComponent {}
