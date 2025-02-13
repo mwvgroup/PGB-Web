@@ -2,25 +2,17 @@
 
 :host {
   @include mat.form-field-overrides((
-   outlined-container-shape: 30px,
+   filled-container-color: white,
   ));
 }
 
-form {
-  display:         flex;
-  flex-direction:  row;
-  gap:             16px;
-  max-width:       600px;
-}
-
 mat-form-field {
-  align-items: center;
-  display:     flex;
-  flex:        1;
-  height:      56px;
+  width: 300px;
 }
 
-button {
-  align-self: center;
-  padding:    0 16px;
+form {
+  align-items:    center;
+  display:        flex;
+  flex-direction: row;
+  gap:            20px;
 }
