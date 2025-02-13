@@ -4,8 +4,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
-import { Observable } from "rxjs";
-import { map, startWith } from "rxjs/operators";
+import { Observable, of } from "rxjs";
+import { catchError, map, startWith } from "rxjs/operators";
 
 import { DataService } from "~services/data/data.service";
 import { DatasetFormInterface } from "./dataset-form.interface";
@@ -52,7 +52,13 @@ export class DatasetFormComponent implements OnInit {
 
   /** Fetches valid table names from the API. */
   private initializeOptions(): void {
-    this.dataService.getTableNames().subscribe(names => this.allOptions = names);
+    this.dataService.getTableNames()
+    .pipe(
+      catchError(() => of([]))
+    )
+    .subscribe(
+      names => this.allOptions = names
+    );
   }
 
   /** Initializes form controls with validation. */

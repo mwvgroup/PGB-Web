@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { MatToolbar } from "@angular/material/toolbar";
 import { RouterLink, RouterOutlet } from "@angular/router";
+import { of } from "rxjs";
+import { catchError } from "rxjs/operators";
 import { MetadataService } from "~services/metadata/metadata.service";
 
 /** Page layout with a navigation toolbar and page footer. */
@@ -20,8 +22,12 @@ export class MenuBarLayoutComponent implements OnInit {
 
   /** Load application metadata, including the title and version number. */
   ngOnInit(): void {
-    this.metadataService.getVersion().subscribe(
-      version => this.version = version
-    );
+    this.metadataService.getVersion()
+    .pipe(
+      catchError(() => of(""))
+    )
+    .subscribe({
+      next: version => this.version = version,
+    });
   }
 }
