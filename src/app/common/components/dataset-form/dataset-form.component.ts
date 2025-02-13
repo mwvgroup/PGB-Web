@@ -62,7 +62,7 @@ export class DatasetFormComponent implements OnInit {
     const regex = new RegExp(`^(${regexPattern})$`);
 
     this.form = new FormGroup({
-      datasetName: new FormControl("", [Validators.required, Validators.pattern(regex)]),
+      tableName: new FormControl("", [Validators.required, Validators.pattern(regex)]),
     });
   }
 

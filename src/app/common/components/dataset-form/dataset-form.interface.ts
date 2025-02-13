@@ -1,3 +1,3 @@
 export interface DatasetFormInterface {
-  datasetName: string;
+  tableName: string;
 }
