@@ -1,0 +1,24 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
+
+  <mat-form-field appearance="outline">
+    <mat-label>Select a Dataset</mat-label>
+    <input
+      [matAutocomplete]="auto"
+      formControlName="tableName"
+      matInput
+      type="text"
+    />
+    <mat-autocomplete #auto="matAutocomplete">
+      @for (option of filteredOptions$ | async; track option) {
+        <mat-option [value]="option">
+          {{ option }}
+        </mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <button [disabled]="form.invalid" color="primary" mat-raised-button type="submit">
+    Load Table
+  </button>
+
+</form>
