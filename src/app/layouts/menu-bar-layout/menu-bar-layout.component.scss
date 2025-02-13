@@ -22,7 +22,8 @@
 }
 
 .footer {
+  background: var(--mat-sys-secondary);
+  color:      var(--mat-sys-on-secondary);
   padding:    15px;
   text-align: right;
-  background: var(--mat-sys-secondary);
 }
