@@ -1,11 +1,13 @@
-<mat-card class="feature-card" appearance="outlined">
-  <mat-card-header>
-    <mat-card-title>
-      <ng-content select="[card-title]"/>
-    </mat-card-title>
-  </mat-card-header>
+<a [href]="href" class="feature-card-link-wrapper">
+  <mat-card class="feature-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>
+        <ng-content select="[card-title]"/>
+      </mat-card-title>
+    </mat-card-header>
 
-  <mat-card-content>
-    <ng-content/>
-  </mat-card-content>
-</mat-card>
+    <mat-card-content>
+      <ng-content/>
+    </mat-card-content>
+  </mat-card>
+</a>
