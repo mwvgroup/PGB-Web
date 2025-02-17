@@ -2,7 +2,7 @@
   <div class="hero-content">
     <h1>Pitt-Google Astronomy Broker</h1>
     <p>Select a table below to preview recent data and alerts.</p>
-    <app-dataset-form/>
+    <app-dataset-form (formSubmit)="handleFormSubmit($event)"/>
   </div>
 </app-hero-section>
 

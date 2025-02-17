@@ -28,11 +28,24 @@ export class DataService {
 
   /**
    * Returns data from a database table by name.
-   * @param tableName The name of the table to fetch data from
+   * @param tableName The name of the table to fetch data from.
    * @returns An observable containing table data.
    */
   getTableData(tableName: string): Observable<any> {
     return this.apiService.get<any>(`db/${tableName}`);
+  }
+
+  /**
+   * Returns the column names included in a database.
+   * @param tableName The name of the table to fetch columns for.
+   * @returns An observable containing table column names.
+   */
+  getTableColumns(tableName: string): Observable<any> {
+    return this.fetchDatabaseSchema().pipe(
+      map(
+        schema => schema["tables"][tableName]["columns"],
+      )
+    );
   }
 
   /**
