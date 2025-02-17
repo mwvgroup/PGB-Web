@@ -1,6 +1,9 @@
 <a [href]="href" class="feature-card-link-wrapper">
   <mat-card appearance="outlined" class="feature-card">
     <mat-card-content>
+      @if (icon) {
+        <mat-icon class="feature-icon" aria-hidden="false" aria-label="Cloud icon" fontIcon="{{icon}}"></mat-icon>
+      }
       <ng-content/>
     </mat-card-content>
   </mat-card>

@@ -17,7 +17,12 @@
 }
 
 .feature-card:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 16px var(--mat-sys-primary-fixed);
   transform:  translateY(-3px);
 }
 
+.feature-icon {
+  color:     var(--mat-sys-primary);
+  margin:    20px 20px 25px;
+  transform: scale(3);
+}
