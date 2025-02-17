@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { MatIcon } from "@angular/material/icon";
 import { Router } from "@angular/router";
 
 import { ContentSectionComponent } from "~components/content-section/content-section.component";
@@ -19,6 +20,7 @@ import { HeroSectionComponent } from "~components/hero-section/hero-section.comp
     FeatureCardComponent,
     HeroSectionComponent,
     DatasetFormComponent,
+    MatIcon,
   ],
 })
 export class LandingPageComponent {

@@ -20,4 +20,10 @@
   flex-wrap:       wrap;
   gap:             60px;
   justify-content: center;
+
+  .feature-icon {
+    margin:    20px;
+    transform: scale(3);
+    color: var(--mat-sys-secondary);
+  }
 }
