@@ -1,0 +1,20 @@
+@use '@angular/material' as mat;
+
+:host {
+  @include mat.card-overrides((
+   elevated-container-color:white,
+   outlined-container-color:white,
+  ));
+
+  @include mat.table-overrides((
+   background-color:white,
+  ));
+
+  @include mat.paginator-overrides((
+   container-background-color: white,
+  ));
+}
+
+.card-custom {
+  padding: 10px 20px;
+}
