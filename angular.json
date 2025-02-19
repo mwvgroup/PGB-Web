@@ -33,7 +33,7 @@
             ],
             "styles": [
               "src/static/scss/styles.scss",
-              "src/static/scss/theme.scss"
+              "src/static/scss/colors.scss"
             ],
             "scripts": [],
             "server": "src/main.server.ts",
