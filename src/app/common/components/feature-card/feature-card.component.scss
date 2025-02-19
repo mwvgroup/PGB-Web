@@ -32,3 +32,12 @@
   margin-bottom: 20px;
   margin-top:    20px;
 }
+
+.feature-card-action {
+  color: var(--mat-sys-primary);
+
+  .mat-icon {
+    position: relative;
+    top:      7px;
+  }
+}

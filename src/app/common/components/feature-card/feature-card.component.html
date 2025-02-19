@@ -1,9 +1,12 @@
 <a [href]="href" class="feature-card-link-wrapper">
   <mat-card appearance="outlined" class="feature-card">
     <mat-card-content class="feature-card-content">
-      <mat-icon class="feature-card-icon" fontIcon="{{icon}}"></mat-icon>
+      <mat-icon class="feature-card-icon" fontIcon="{{icon}}"/>
       <h2 class="feature-card-heading">{{ title }}</h2>
       <p class="feature-card-text">{{ description }}</p>
+      <p class="feature-card-action">
+        {{ action }} <mat-icon fontIcon="arrow_right_alt"/>
+      </p>
     </mat-card-content>
   </mat-card>
 </a>
