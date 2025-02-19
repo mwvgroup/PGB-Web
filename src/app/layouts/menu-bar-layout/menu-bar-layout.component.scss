@@ -6,7 +6,7 @@
   height:         100vh;
 
   @include mat.toolbar-overrides((
-   container-background-color: var(--mat-sys-primary),
+   container-background-color: #003864,
    container-text-color: var(--mat-sys-on-primary)
   ));
 }
