@@ -1,10 +1,11 @@
-<div class="section-wrapper">
-  <!-- Projected title -->
+<div class="section-wrapper" [ngClass]="{ 'alt-section-style': altStyle }">
+  <!-- Projected title. -->
   <div class="section-title">
-    <ng-content select="[section-title]"></ng-content>
+    <ng-content select="[section-title]"/>
   </div>
 
+  <!-- All other section content. -->
   <div>
-    <ng-content></ng-content>
+    <ng-content/>
   </div>
 </div>
