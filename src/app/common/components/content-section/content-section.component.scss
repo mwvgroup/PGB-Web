@@ -1,8 +1,11 @@
-.section-wrapper {
-  margin:  0;
-  padding: 50px 75px;
+.content-section-wrapper {
+  padding: 60px 75px;
 
   &.alt-section-style {
     background: #f1f1f1;
   }
+}
+
+.content-section-title {
+  margin-top: 0;
 }

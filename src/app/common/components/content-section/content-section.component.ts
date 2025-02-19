@@ -6,10 +6,9 @@ import { Component, Input } from "@angular/core";
   selector: "app-content-section",
   templateUrl: "content-section.component.html",
   styleUrl: "content-section.component.scss",
-  imports: [
-    NgClass
-  ]
+  imports: [NgClass]
 })
 export class ContentSectionComponent {
+  @Input() title!: string;
   @Input() altStyle: boolean = false;
 }
