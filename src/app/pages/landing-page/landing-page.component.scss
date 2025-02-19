@@ -21,3 +21,19 @@
   gap:             100px;
   justify-content: center;
 }
+
+.about-content {
+  display: flex;
+
+  img {
+    border-radius: 8px;
+    height:        500px;
+    margin:        20px;
+    width:         500px;
+  }
+
+  p {
+    margin: 20px;
+  }
+}
+
