@@ -21,3 +21,19 @@
   gap:             100px;
   justify-content: center;
 }
+
+.about-content {
+  align-items: center;
+  display:     flex;
+
+  img {
+    height: 500px;
+    margin: 20px;
+    width:  500px;
+  }
+
+  p {
+    margin: 20px;
+  }
+}
+

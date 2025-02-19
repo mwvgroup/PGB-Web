@@ -1,3 +1,15 @@
-.section-wrapper {
-  margin: 70px 75px;
+.content-section-wrapper {
+  padding: 60px 75px;
+
+  &.alt-section-style {
+    background: #f1f1f1;
+  }
+}
+
+.content-section-title {
+  margin-top: 0;
+}
+
+.content-section-body {
+  margin: 0 25px;
 }
