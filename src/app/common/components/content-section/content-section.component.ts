@@ -1,7 +1,15 @@
 import { NgClass } from "@angular/common";
 import { Component, Input } from "@angular/core";
 
-/** Wrap page content with reasonable padding/margins. */
+/**
+ * A reusable content wrapper used to structure distinct sections within a page.
+ * Supports an optional alternative style with background/text styling for a
+ * clear, visual separation from neighboring sections.
+ *
+ * Inputs:
+ * - `title`: Optional title text for the content section.
+ * - `altStyle`: Boolean used to enable alternative styling.
+ */
 @Component({
   selector: "app-content-section",
   templateUrl: "content-section.component.html",

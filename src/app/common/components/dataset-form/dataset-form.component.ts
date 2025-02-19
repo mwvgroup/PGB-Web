@@ -12,8 +12,8 @@ import { DatasetFormInterface } from "./dataset-form.interface";
 
 /**
  * A form for selecting a dataset name from the application database.
- * Form options are automatically populated via the API.
- * The selected table name is emitted on form submit.
+ * Form options are automatically populated via the API and the selected table
+ * name is emitted on form submit.
  */
 @Component({
   selector: "app-dataset-form",
