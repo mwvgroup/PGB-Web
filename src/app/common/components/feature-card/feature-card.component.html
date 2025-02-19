@@ -4,7 +4,8 @@
       @if (icon) {
         <mat-icon class="feature-icon" aria-hidden="false" aria-label="Cloud icon" fontIcon="{{icon}}"></mat-icon>
       }
-      <ng-content/>
+      <h2>{{ title }}</h2>
+      <p>{{ description }}</p>
     </mat-card-content>
   </mat-card>
 </a>

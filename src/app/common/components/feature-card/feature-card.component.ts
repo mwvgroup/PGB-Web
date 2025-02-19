@@ -13,6 +13,8 @@ import { MatIcon } from "@angular/material/icon";
   styleUrl: "feature-card.component.scss"
 })
 export class FeatureCardComponent {
-  @Input() href?: string;
-  @Input() icon?: string;
+  @Input() href: string = "";
+  @Input() icon: string = "";
+  @Input() title: string = "";
+  @Input() description: string = "";
 }
