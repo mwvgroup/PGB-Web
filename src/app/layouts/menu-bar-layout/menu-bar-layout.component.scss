@@ -17,13 +17,15 @@
   font-weight: bold;
 }
 
-.main-content {
+main {
   flex: 1;
 }
 
-.footer {
-  background: var(--mat-sys-secondary);
-  color:      var(--mat-sys-on-secondary);
+footer {
+  background: var(--mat-sys-tertiary);
+  color:      var(--mat-sys-on-tertiary);
+  margin-top: 30px;
+  min-height: 15px;
   padding:    15px;
   text-align: right;
 }
