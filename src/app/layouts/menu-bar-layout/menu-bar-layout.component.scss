@@ -11,10 +11,22 @@
   ));
 }
 
-.logo-text {
-  cursor:      pointer;
-  font-size:   1.5rem;
-  font-weight: bold;
+mat-toolbar {
+  padding: 0 30px;
+
+  * {
+    vertical-align: middle;
+  }
+
+  .logo-text {
+    cursor:      pointer;
+    font-size:   1.5rem;
+    font-weight: bold;
+  }
+
+  .horizontal-spacer {
+    flex: 1 1 auto;
+  }
 }
 
 main {

@@ -3,6 +3,7 @@ import { MatToolbar } from "@angular/material/toolbar";
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { of } from "rxjs";
 import { catchError } from "rxjs/operators";
+import { environment } from "~environments/environment";
 import { MetadataService } from "~services/metadata/metadata.service";
 
 /** Page layout with a navigation toolbar and page footer. */
@@ -16,6 +17,7 @@ import { MetadataService } from "~services/metadata/metadata.service";
   ],
 })
 export class MenuBarLayoutComponent implements OnInit {
+  projectSourceUrl: string = environment.projectSourceUrl;
   protected version!: string;
 
   constructor(private metadataService: MetadataService) {}
