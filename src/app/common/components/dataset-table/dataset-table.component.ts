@@ -5,6 +5,7 @@ import { MatSortModule, Sort } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
+import { environment } from "~environments/environment";
 import { DataService } from "~services/data/data.service";
 
 /**
@@ -28,8 +29,8 @@ export class DatasetTableComponent implements OnInit {
   @Input() displayedColumns: string[] = [];
 
   protected data$!: Observable<Record<string, any>[]>;
-  protected pageSizeOptions: number[] = [1, 2, 3];
-  protected pageSize: number = 3;
+  protected pageSizeOptions: number[] = environment.pageSizeOptions;
+  protected pageSize: number = environment.pageSizeDefault;
   protected pageIndex: number = 0;
   protected sortColumn: String = "";
   protected sortDirection: "asc" | "desc" | "" = "";
