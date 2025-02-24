@@ -28,6 +28,19 @@ export class DataService {
   }
 
   /**
+   * Returns the column names included in a database.
+   * @param tableName The name of the table to fetch columns for.
+   * @returns An observable containing table column names.
+   */
+  getColumnNames(tableName: string): Observable<any> {
+    return this.fetchDatabaseSchema().pipe(
+      map(
+        schema => Object.keys(schema["tables"][tableName]["columns"]),
+      )
+    );
+  }
+
+  /**
    * Returns data from a database table by name.
    * @param tableName The name of the table to fetch data from.
    * @param pageIndex The index of the page to fetch (optional).
@@ -56,19 +69,6 @@ export class DataService {
     }
 
     return this.apiService.get<any>(`db/${tableName}`, {params: params});
-  }
-
-  /**
-   * Returns the column names included in a database.
-   * @param tableName The name of the table to fetch columns for.
-   * @returns An observable containing table column names.
-   */
-  getTableColumns(tableName: string): Observable<any> {
-    return this.fetchDatabaseSchema().pipe(
-      map(
-        schema => schema["tables"][tableName]["columns"],
-      )
-    );
   }
 
   /**

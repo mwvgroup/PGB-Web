@@ -64,12 +64,12 @@ export class DatasetTableComponent implements OnInit {
 
   /** Fetches the table schema to determine the columns to display. */
   private fetchTableColumns(): void {
-    this.dataService.getTableColumns(this.tableName)
+    this.dataService.getColumnNames(this.tableName)
     .pipe(
       catchError(() => of([]))
     )
     .subscribe(
-      columns => this.displayedColumns = Object.keys(columns)
+      columns => this.displayedColumns = columns
     );
   }
 

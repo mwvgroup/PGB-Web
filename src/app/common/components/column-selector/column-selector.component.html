@@ -1,0 +1,7 @@
+<mat-form-field>
+  <mat-select multiple>
+    @for (column of columnList; track column) {
+      <mat-option [value]="column">{{column}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
