@@ -31,6 +31,8 @@ export class DatasetTableComponent implements OnInit {
   protected pageSizeOptions: number[] = [1, 2, 3];
   protected pageSize: number = 3;
   protected pageIndex: number = 0;
+  protected sortColumn: String = "";
+  protected sortDirection: "asc" | "desc" | "" = "";
 
   constructor(private dataService: DataService) {}
 
@@ -44,7 +46,8 @@ export class DatasetTableComponent implements OnInit {
    * @param $event - The sorting event emitted by the Sort component.
    */
   updateSorting($event: Sort) {
-    // Todo: Not implemented
+    this.sortColumn = $event.active;
+    this.sortDirection = $event.direction;
     this.fetchTableData();
   }
 
@@ -78,6 +81,8 @@ export class DatasetTableComponent implements OnInit {
       this.tableName,
       this.pageIndex,
       this.pageSize,
+      this.sortColumn as string,
+      this.sortDirection
     );
   }
 }
