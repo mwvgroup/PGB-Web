@@ -5,6 +5,7 @@ import { MatSortModule, Sort } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
+import { environment } from "~environments/environment";
 import { DataService } from "~services/data/data.service";
 
 /**
@@ -28,9 +29,11 @@ export class DatasetTableComponent implements OnInit {
   @Input() displayedColumns: string[] = [];
 
   protected data$!: Observable<Record<string, any>[]>;
-  protected pageSizeOptions: number[] = [5, 10, 15];
-  private pageCriteria: PageEvent | null = null;
-  private sortCriteria: Sort | null = null;
+  protected pageSizeOptions: number[] = environment.pageSizeOptions;
+  protected pageSize: number = environment.pageSizeDefault;
+  protected pageIndex: number = 0;
+  protected sortColumn: String = "";
+  protected sortDirection: "asc" | "desc" | "" = "";
 
   constructor(private dataService: DataService) {}
 
@@ -44,7 +47,8 @@ export class DatasetTableComponent implements OnInit {
    * @param $event - The sorting event emitted by the Sort component.
    */
   updateSorting($event: Sort) {
-    this.sortCriteria = $event;
+    this.sortColumn = $event.active;
+    this.sortDirection = $event.direction;
     this.fetchTableData();
   }
 
@@ -53,7 +57,8 @@ export class DatasetTableComponent implements OnInit {
    * @param $event - The pagination event emitted Paginator component.
    */
   updatePagination($event: PageEvent) {
-    this.pageCriteria = $event;
+    this.pageSize = $event.pageSize;
+    this.pageIndex = $event.pageIndex;
     this.fetchTableData();
   }
 
@@ -73,7 +78,12 @@ export class DatasetTableComponent implements OnInit {
    * ordering criteria.
    */
   private fetchTableData(): void {
-    // Todo: include pagination and ordering params
-    this.data$ = this.dataService.getTableData(this.tableName);
+    this.data$ = this.dataService.getTableData(
+      this.tableName,
+      this.pageIndex,
+      this.pageSize,
+      this.sortColumn as string,
+      this.sortDirection
+    );
   }
 }

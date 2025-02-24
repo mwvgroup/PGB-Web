@@ -1,3 +1,4 @@
+import { HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { map, Observable, shareReplay } from "rxjs";
 
@@ -29,10 +30,32 @@ export class DataService {
   /**
    * Returns data from a database table by name.
    * @param tableName The name of the table to fetch data from.
+   * @param pageIndex The index of the page to fetch (optional).
+   * @param pageSize The size of the page to fetch (optional).
+   * @param orderBy The column name to sort by (optional).
+   * @param direction The direction to sort by (optional).
    * @returns An observable containing table data.
    */
-  getTableData(tableName: string): Observable<any> {
-    return this.apiService.get<any>(`db/${tableName}`);
+  getTableData(
+    tableName: string, pageIndex?: number, pageSize?: number, orderBy?: string, direction?: string
+  ): Observable<any> {
+
+    let params = new HttpParams({
+      fromObject: {
+        _page_: pageIndex || 1,
+        _limit_: pageSize || 0,
+      }
+    });
+
+    if (orderBy) {
+      params = params.set("_order_by_", orderBy);
+    }
+
+    if (direction) {
+      params = params.set("_direction_", direction);
+    }
+
+    return this.apiService.get<any>(`db/${tableName}`, {params: params});
   }
 
   /**
