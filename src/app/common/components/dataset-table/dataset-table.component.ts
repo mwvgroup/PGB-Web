@@ -28,9 +28,9 @@ export class DatasetTableComponent implements OnInit {
   @Input() displayedColumns: string[] = [];
 
   protected data$!: Observable<Record<string, any>[]>;
-  protected pageSizeOptions: number[] = [5, 10, 15];
-  private pageCriteria: PageEvent | null = null;
-  private sortCriteria: Sort | null = null;
+  protected pageSizeOptions: number[] = [1, 2, 3];
+  protected pageSize: number = 3;
+  protected pageIndex: number = 0;
 
   constructor(private dataService: DataService) {}
 
@@ -44,7 +44,7 @@ export class DatasetTableComponent implements OnInit {
    * @param $event - The sorting event emitted by the Sort component.
    */
   updateSorting($event: Sort) {
-    this.sortCriteria = $event;
+    // Todo: Not implemented
     this.fetchTableData();
   }
 
@@ -53,7 +53,8 @@ export class DatasetTableComponent implements OnInit {
    * @param $event - The pagination event emitted Paginator component.
    */
   updatePagination($event: PageEvent) {
-    this.pageCriteria = $event;
+    this.pageSize = $event.pageSize;
+    this.pageIndex = $event.pageIndex;
     this.fetchTableData();
   }
 
@@ -73,7 +74,10 @@ export class DatasetTableComponent implements OnInit {
    * ordering criteria.
    */
   private fetchTableData(): void {
-    // Todo: include pagination and ordering params
-    this.data$ = this.dataService.getTableData(this.tableName);
+    this.data$ = this.dataService.getTableData(
+      this.tableName,
+      this.pageIndex,
+      this.pageSize,
+    );
   }
 }

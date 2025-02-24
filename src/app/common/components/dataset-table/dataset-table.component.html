@@ -18,6 +18,8 @@
 
   <mat-paginator
     (page)="updatePagination($event)"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
     [pageSizeOptions]="pageSizeOptions"
     aria-label="Select page of periodic elements"
     showFirstLastButtons
