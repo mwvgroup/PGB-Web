@@ -1,10 +1,13 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
-
 import { environment } from "~environments/environment";
-import { RequestOptions } from "./api.interface";
+
+interface RequestOptions {
+  body?: any;
+  params?: HttpParams;
+}
 
 /**
  * Low level service used to facilitate consistent interaction with the API.
@@ -24,59 +27,49 @@ export class APIService {
   /**
    * Send a GET request to the API.
    * @param endpoint The API endpoint (relative to the base URL).
-   * @param options Optional settings such as headers or query parameters.
+   * @param params Optional HTTP parameters for the request.
    */
-  get<T>(endpoint: string, options?: RequestOptions): Observable<T> {
-    return this.http.get<T>(this.resolveUrl(endpoint), options).pipe(
-      catchError(this.handleError)
-    );
+  get(endpoint: string, params?: HttpParams): Observable<HttpResponse<Object>> {
+    return this.sendRequest("GET", endpoint, undefined, params);
   }
 
   /**
    * Send a POST request to the API.
-   * @param endpoint The API endpoint.
+   * @param endpoint The API endpoint (relative to the base URL).
    * @param data The data to send in the request body.
-   * @param options Optional settings such as headers.
+   * @param params Optional HTTP parameters for the request.
    */
-  post<T>(endpoint: string, data: any, options?: RequestOptions): Observable<T> {
-    return this.http.post<T>(this.resolveUrl(endpoint), data, options).pipe(
-      catchError(this.handleError)
-    );
+  post(endpoint: string, data: any, params?: HttpParams): Observable<HttpResponse<Object>> {
+    return this.sendRequest("POST", endpoint, data, params);
   }
 
   /**
    * Send a PUT request to the API.
-   * @param endpoint The API endpoint.
-   * @param data The data to update.
-   * @param options Optional settings such as headers.
+   * @param endpoint The API endpoint (relative to the base URL).
+   * @param data The data to send in the request body.
+   * @param params Optional HTTP parameters for the request.
    */
-  put<T>(endpoint: string, data: any, options?: RequestOptions): Observable<T> {
-    return this.http.put<T>(this.resolveUrl(endpoint), data, options).pipe(
-      catchError(this.handleError)
-    );
+  put(endpoint: string, data: any, params?: HttpParams): Observable<HttpResponse<Object>> {
+    return this.sendRequest("PUT", endpoint, data, params);
   }
 
   /**
    * Send a PATCH request to the API.
-   * @param endpoint The API endpoint.
-   * @param data The data to update.
-   * @param options Optional settings such as headers.
+   * @param endpoint The API endpoint (relative to the base URL).
+   * @param data The data to send in the request body.
+   * @param params Optional HTTP parameters for the request.
    */
-  patch<T>(endpoint: string, data: any, options?: RequestOptions): Observable<T> {
-    return this.http.patch<T>(this.resolveUrl(endpoint), data, options).pipe(
-      catchError(this.handleError)
-    );
+  patch(endpoint: string, data: any, params?: HttpParams): Observable<HttpResponse<Object>> {
+    return this.sendRequest("PATCH", endpoint, data, params);
   }
 
   /**
    * Send a DELETE request to the API.
-   * @param endpoint The API endpoint.
-   * @param options Optional settings such as headers or query parameters.
+   * @param endpoint The API endpoint (relative to the base URL).
+   * @param params Optional HTTP parameters for the request.
    */
-  delete<T>(endpoint: string, options?: RequestOptions): Observable<T> {
-    return this.http.delete<T>(this.resolveUrl(endpoint), options).pipe(
-      catchError(this.handleError)
-    );
+  delete(endpoint: string, params?: HttpParams): Observable<HttpResponse<Object>> {
+    return this.sendRequest("DELETE", endpoint, undefined, params);
   }
 
   /**
@@ -84,8 +77,29 @@ export class APIService {
    * @param endpoint The endpoint relative to the base URL.
    */
   private resolveUrl(endpoint: string): string {
-    const clean_endpoint = endpoint.replace(/^\//, "");
+    const clean_endpoint: string = endpoint.replace(/^\//, "");
     return `${this.baseUrl}/${clean_endpoint}`;
+  }
+
+  /**
+   * Send an arbitrary HTTP request.
+   * @param method The HTTP method (GET, POST, PUT, DELETE, etc.).
+   * @param endpoint The API endpoint (relative to the base URL).
+   * @param body Optional data to send in the request body.
+   * @param params Optional HTTP parameters for the request.
+   */
+  private sendRequest(
+    method: string,
+    endpoint: string,
+    body?: any,
+    params?: HttpParams
+  ): Observable<HttpResponse<Object>> {
+    const url: string = this.resolveUrl(endpoint);
+    const options: RequestOptions = {params, body};
+
+    return this.http.request(method, url, options).pipe(
+      catchError(this.handleError)
+    );
   }
 
   /**
