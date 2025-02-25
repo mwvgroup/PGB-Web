@@ -7,6 +7,7 @@ import { environment } from "~environments/environment";
 interface RequestOptions {
   body?: any;
   params?: HttpParams;
+  observe: "response";
 }
 
 /**
@@ -95,7 +96,7 @@ export class APIService {
     params?: HttpParams
   ): Observable<HttpResponse<Object>> {
     const url: string = this.resolveUrl(endpoint);
-    const options: RequestOptions = {params, body};
+    const options: RequestOptions = {params, body, observe: "response"};
 
     return this.http.request(method, url, options).pipe(
       catchError(this.handleError)
