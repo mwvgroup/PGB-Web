@@ -1,4 +1,8 @@
 <app-content-section>
-  <h1>{{ tableName }}</h1>
+  <div class="page-title-section">
+    <h1>{{ tableName }}</h1>
+    <app-download-button/>
+  </div>
+
   <app-dataset-view-table [tableName]="tableName"/>
 </app-content-section>
