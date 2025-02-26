@@ -90,7 +90,7 @@ export class DatasetTableComponent implements OnInit {
       }
     ).subscribe((page: PaginatedData) => {
       this.pageData = page["pageData"];
-      this.tableLength = page["tableLength"];
+      this.tableLength = this.tableLength || page["tableLength"];
     });
   }
 }
