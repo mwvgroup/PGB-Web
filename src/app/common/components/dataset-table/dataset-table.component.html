@@ -1,7 +1,7 @@
 <mat-card class="card-custom">
   <table
     (matSortChange)="updateSorting($event)"
-    [dataSource]="data$"
+    [dataSource]="pageData"
     mat-table
     matSort>
 
@@ -21,7 +21,7 @@
     [pageIndex]="pageIndex"
     [pageSize]="pageSize"
     [pageSizeOptions]="pageSizeOptions"
-    aria-label="Select page of periodic elements"
+    [length]="tableLength"
     showFirstLastButtons
   >
   </mat-paginator>
