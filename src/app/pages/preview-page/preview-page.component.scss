@@ -1,6 +1,17 @@
 .page-title-section {
-  display: flex;
+  align-items:     center;
+  display:         flex;
+  flex-wrap:       wrap;
   justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
+  margin:          20px 0;
+  padding:         0 20px;
+}
+
+
+@media (max-width: 600px) {
+  .page-title-section > * {
+    flex:            1 1 100%;
+    justify-content: center;
+    text-align:      center;
+  }
 }
