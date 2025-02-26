@@ -1,30 +1,48 @@
-import { HttpParams } from "@angular/common/http";
+import { HttpParams, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { map, Observable, shareReplay } from "rxjs";
 
 import { APIService } from "~services/api/api.service";
 import { Schema } from "./data.interface";
 
-/**
- * Service for fetching data from the application database via the API.
- **/
+/** Service for fetching data from the application database via the API. */
 @Injectable({
   providedIn: "root"
 })
 export class DataService {
+  private apiSchemaEndpoint: string = "meta/schema/";
+  private dbSchema$!: Observable<Schema>;
 
-  // Define API endpoints and cache for API results
-  private apiEndpoint: string = "meta/schema";
-  private apiCache$!: Observable<Schema>;
-
-  constructor(private apiService: APIService) {}
+  /**
+   * Instantiate an observable for the database schema fetched from the API.
+   * The API response is automatically cached for the lifetime of the service.
+   */
+  constructor(private apiService: APIService) {
+    this.dbSchema$ = this.apiService.get(this.apiSchemaEndpoint).pipe(
+      map((response: HttpResponse<Object>) => response.body as Schema),
+      shareReplay(1)
+    );
+  }
 
   /**
    * Returns a list of table names from the database.
    * @returns An observable containing the database schema.
    */
   getTableNames(): Observable<string[]> {
-    return this.fetchDatabaseSchema().pipe(map(schema => Object.keys(schema.tables)));
+    return this.dbSchema$.pipe(
+      map((schema: Schema) => Object.keys(schema.tables))
+    );
+  }
+
+  /**
+   * Returns the column names for a given database table.
+   * @param tableName The name of the table to fetch columns for.
+   * @returns An observable containing table column names.
+   */
+  getColumnNames(tableName: string): Observable<any> {
+    return this.dbSchema$.pipe(
+      map((schema: Schema) => schema["tables"][tableName]["columns"])
+    );
   }
 
   /**
@@ -40,7 +58,7 @@ export class DataService {
     tableName: string, pageIndex?: number, pageSize?: number, orderBy?: string, direction?: string
   ): Observable<any> {
 
-    let params = new HttpParams({
+    let params: HttpParams = new HttpParams({
       fromObject: {
         _page_: pageIndex || 1,
         _limit_: pageSize || 0,
@@ -55,33 +73,8 @@ export class DataService {
       params = params.set("_direction_", direction);
     }
 
-    return this.apiService.get<any>(`db/${tableName}`, {params: params});
-  }
-
-  /**
-   * Returns the column names included in a database.
-   * @param tableName The name of the table to fetch columns for.
-   * @returns An observable containing table column names.
-   */
-  getTableColumns(tableName: string): Observable<any> {
-    return this.fetchDatabaseSchema().pipe(
-      map(
-        schema => schema["tables"][tableName]["columns"],
-      )
+    return this.apiService.get(`db/${tableName}/`, params).pipe(
+      map((response: HttpResponse<Object>) => response.body),
     );
-  }
-
-  /**
-   * Fetches, caches, and returns application metadata from the API.
-   * @returns An observable containing the database schema.
-   */
-  private fetchDatabaseSchema(): Observable<Schema> {
-    if (!this.apiCache$) {
-      this.apiCache$ = this.apiService.get<Schema>(this.apiEndpoint).pipe(
-        shareReplay(1)
-      );
-    }
-
-    return this.apiCache$;
   }
 }

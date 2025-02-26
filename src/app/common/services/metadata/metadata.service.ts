@@ -1,50 +1,36 @@
+import { HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { map, Observable, shareReplay } from "rxjs";
 
 import { APIService } from "~services/api/api.service";
 import { AppMeta } from "./metadata.interface";
 
-/**
- * Service for fetching (and caching) application metadata from the API.
- **/
+/** Service for fetching application metadata from the API. */
 @Injectable({
   providedIn: "root"
 })
 export class MetadataService {
-
-  // Define API endpoints and cache for API results
-  private apiEndpoint: string = "meta/app";
-  private apiCache$!: Observable<AppMeta>;
-
-  constructor(private apiService: APIService) {}
+  private readonly apiEndpoint: string = "meta/app/";
+  private appMetadata$!: Observable<AppMeta>;
 
   /**
-   * Returns the application name.
-   * @returns An observable containing the application name.
+   * Instantiates an observable for application metadata fetched from the API.
+   * The API response is automatically cached for the lifetime of the service.
    */
-  getTitle(): Observable<string> {
-    return this.fetchAPIData().pipe(map(meta => meta.name));
+  constructor(private apiService: APIService) {
+    this.appMetadata$ = this.apiService.get(this.apiEndpoint).pipe(
+      map((response: HttpResponse<Object>) => response.body as AppMeta),
+      shareReplay(1)
+    );
   }
 
   /**
    * Returns the application version number.
    * @returns An observable containing the version string.
    */
-  getVersion(): Observable<string> {
-    return this.fetchAPIData().pipe(map(meta => meta.version));
-  }
-
-  /**
-   * Fetches, caches, and returns application metadata from the API.
-   * @returns An observable containing the metadata object.
-   */
-  private fetchAPIData(): Observable<AppMeta> {
-    if (!this.apiCache$) {
-      this.apiCache$ = this.apiService.get<AppMeta>(this.apiEndpoint).pipe(
-        shareReplay(1)
-      );
-    }
-
-    return this.apiCache$;
+  getAppVersion(): Observable<string> {
+    return this.appMetadata$.pipe(
+      map((meta: AppMeta) => meta.version)
+    );
   }
 }
