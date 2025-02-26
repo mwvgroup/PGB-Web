@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { map, Observable, shareReplay } from "rxjs";
 
 import { APIService } from "~services/api/api.service";
-import { Schema } from "./data.interface";
+import { PaginatedData, Schema } from "./data.interface";
 
 /** Service for fetching data from the application database via the API. */
 @Injectable({
@@ -39,9 +39,9 @@ export class DataService {
    * @param tableName The name of the table to fetch columns for.
    * @returns An observable containing table column names.
    */
-  getColumnNames(tableName: string): Observable<any> {
+  getColumnNames(tableName: string): Observable<string[]> {
     return this.dbSchema$.pipe(
-      map((schema: Schema) => schema["tables"][tableName]["columns"])
+      map((schema: Schema) => Object.keys(schema["tables"][tableName]["columns"]))
     );
   }
 
@@ -56,7 +56,7 @@ export class DataService {
    */
   getTableData(
     tableName: string, pageIndex?: number, pageSize?: number, orderBy?: string, direction?: string
-  ): Observable<any> {
+  ): Observable<PaginatedData> {
 
     let params: HttpParams = new HttpParams({
       fromObject: {
@@ -74,7 +74,14 @@ export class DataService {
     }
 
     return this.apiService.get(`db/${tableName}/`, params).pipe(
-      map((response: HttpResponse<Object>) => response.body),
+      map(
+        (response: HttpResponse<Object>) => {
+          return {
+            pageData: response.body,
+            tableLength: parseInt(response.headers.get("x-pagination-total") as string)
+          };
+        }
+      )
     );
   }
 }

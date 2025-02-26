@@ -3,9 +3,11 @@ import { MatCard } from "@angular/material/card";
 import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { MatSortModule, Sort } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
-import { Observable, of } from "rxjs";
+import { of } from "rxjs";
 import { catchError } from "rxjs/operators";
+
 import { environment } from "~environments/environment";
+import { PaginatedData } from "~services/data/data.interface";
 import { DataService } from "~services/data/data.service";
 
 /**
@@ -29,7 +31,8 @@ export class DatasetTableComponent implements OnInit {
   @Input() displayedColumns: string[] = [];
 
   // Store the displayed data along with state information for HTML components
-  protected data$!: Observable<Record<string, any>[]>;
+  protected pageData!: Record<string, any>[];
+  protected tableLength: number = 0;
   protected pageSizeOptions: number[] = environment.pageSizeOptions;
   protected pageSize: number = environment.pageSizeDefault;
   protected pageIndex: number = 0;
@@ -70,7 +73,7 @@ export class DatasetTableComponent implements OnInit {
       catchError(() => of([]))
     )
     .subscribe(
-      columns => this.displayedColumns = Object.keys(columns)
+      columns => this.displayedColumns = columns
     );
   }
 
@@ -79,12 +82,15 @@ export class DatasetTableComponent implements OnInit {
    * ordering criteria.
    */
   private fetchTableData(): void {
-    this.data$ = this.dataService.getTableData(
+    this.dataService.getTableData(
       this.tableName,
       this.pageIndex,
       this.pageSize,
       this.sortColumn as string,
       this.sortDirection
-    );
+    ).subscribe((page: PaginatedData) => {
+      this.pageData = page["pageData"];
+      this.tableLength = page["tableLength"];
+    });
   }
 }

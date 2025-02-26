@@ -19,3 +19,8 @@ export interface Schema {
     [key: string]: SchemaTable
   };
 }
+
+export interface PaginatedData {
+  pageData: any;
+  tableLength: any;
+}
