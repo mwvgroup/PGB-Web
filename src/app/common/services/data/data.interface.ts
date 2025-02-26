@@ -22,5 +22,5 @@ export interface Schema {
 
 export interface PaginatedData {
   pageData: any;
-  tableLength: any;
+  tableLength: number;
 }

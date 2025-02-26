@@ -31,7 +31,7 @@ export class DatasetTableComponent implements OnInit {
   @Input() displayedColumns: string[] = [];
 
   // Store the displayed data along with state information for HTML components
-  protected pageData!: Record<string, any>[];
+  protected pageData: Record<string, any>[] = [];
   protected tableLength: number = 0;
   protected pageSizeOptions: number[] = environment.pageSizeOptions;
   protected pageSize: number = environment.pageSizeDefault;
@@ -58,7 +58,7 @@ export class DatasetTableComponent implements OnInit {
 
   /**
    * Updates the pagination criteria and refreshes the displayed data.
-   * @param $event - The pagination event emitted Paginator component.
+   * @param $event - The pagination event emitted by the Paginator component.
    */
   protected updatePagination($event: PageEvent) {
     this.pageSize = $event.pageSize;
@@ -73,13 +73,12 @@ export class DatasetTableComponent implements OnInit {
       catchError(() => of([]))
     )
     .subscribe(
-      columns => this.displayedColumns = columns
+      (columns: string[]) => this.displayedColumns = columns
     );
   }
 
   /**
-   * Fetches table data from the API based on the current pagination and
-   * ordering criteria.
+   * Fetches table data from the API based on the current pagination/ordering criteria.
    */
   private fetchTableData(): void {
     this.dataService.getTableData(
