@@ -28,6 +28,7 @@ export class DatasetTableComponent implements OnInit {
   @Input() tableName!: string;
   @Input() displayedColumns: string[] = [];
 
+  // Store the displayed data along with state information for HTML components
   protected data$!: Observable<Record<string, any>[]>;
   protected pageSizeOptions: number[] = environment.pageSizeOptions;
   protected pageSize: number = environment.pageSizeDefault;
@@ -46,7 +47,7 @@ export class DatasetTableComponent implements OnInit {
    * Updates the table sorting criteria and refreshes the displayed data.
    * @param $event - The sorting event emitted by the Sort component.
    */
-  updateSorting($event: Sort) {
+  protected updateSorting($event: Sort) {
     this.sortColumn = $event.active;
     this.sortDirection = $event.direction;
     this.fetchTableData();
@@ -56,7 +57,7 @@ export class DatasetTableComponent implements OnInit {
    * Updates the pagination criteria and refreshes the displayed data.
    * @param $event - The pagination event emitted Paginator component.
    */
-  updatePagination($event: PageEvent) {
+  protected updatePagination($event: PageEvent) {
     this.pageSize = $event.pageSize;
     this.pageIndex = $event.pageIndex;
     this.fetchTableData();
@@ -64,7 +65,7 @@ export class DatasetTableComponent implements OnInit {
 
   /** Fetches the table schema to determine the columns to display. */
   private fetchTableColumns(): void {
-    this.dataService.getTableColumns(this.tableName)
+    this.dataService.getColumnNames(this.tableName)
     .pipe(
       catchError(() => of([]))
     )

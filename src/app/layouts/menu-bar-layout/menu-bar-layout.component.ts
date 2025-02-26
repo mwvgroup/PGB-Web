@@ -24,7 +24,7 @@ export class MenuBarLayoutComponent implements OnInit {
 
   /** Load application metadata, including the title and version number. */
   ngOnInit(): void {
-    this.metadataService.getVersion()
+    this.metadataService.getAppVersion()
     .pipe(
       catchError(() => of(""))
     )
