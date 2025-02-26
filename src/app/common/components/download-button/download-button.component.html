@@ -1,0 +1,11 @@
+<mat-button-toggle-group>
+  <button mat-flat-button [matMenuTriggerFor]="menu">
+    Download
+    <mat-icon>keyboard_arrow_down</mat-icon>
+  </button>
+</mat-button-toggle-group>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>CSV</button>
+  <button mat-menu-item>JSON</button>
+</mat-menu>
