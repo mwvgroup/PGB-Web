@@ -48,40 +48,30 @@ export class DataService {
   /**
    * Returns data from a database table by name.
    * @param tableName The name of the table to fetch data from.
-   * @param pageIndex The index of the page to fetch (optional).
-   * @param pageSize The size of the page to fetch (optional).
-   * @param orderBy The column name to sort by (optional).
-   * @param direction The direction to sort by (optional).
+   * @param options Optional pagination/ordering settings for the returned data.
    * @returns An observable containing table data.
    */
   getTableData(
-    tableName: string, pageIndex?: number, pageSize?: number, orderBy?: string, direction?: string
+    tableName: string,
+    options: { pageIndex?: number; pageSize?: number; orderBy?: string; direction?: string } = {}
   ): Observable<PaginatedData> {
 
+    const {pageIndex = 0, pageSize = 0, orderBy, direction} = options;
     let params: HttpParams = new HttpParams({
       fromObject: {
-        _page_: pageIndex || 1,
-        _limit_: pageSize || 0,
+        _offset_: pageIndex * pageSize,
+        _limit_: pageSize
       }
     });
 
-    if (orderBy) {
-      params = params.set("_order_by_", orderBy);
-    }
-
-    if (direction) {
-      params = params.set("_direction_", direction);
-    }
+    if (orderBy) params = params.set("_order_by_", orderBy);
+    if (direction) params = params.set("_direction_", direction);
 
     return this.apiService.get(`db/${tableName}/`, params).pipe(
-      map(
-        (response: HttpResponse<Object>) => {
-          return {
-            pageData: response.body,
-            tableLength: parseInt(response.headers.get("x-pagination-total") as string)
-          };
-        }
-      )
+      map((response: HttpResponse<Object>) => ({
+        pageData: response.body,
+        tableLength: Number(response.headers.get("x-pagination-total"))
+      }))
     );
   }
 }

@@ -82,11 +82,12 @@ export class DatasetTableComponent implements OnInit {
    */
   private fetchTableData(): void {
     this.dataService.getTableData(
-      this.tableName,
-      this.pageIndex,
-      this.pageSize,
-      this.sortColumn as string,
-      this.sortDirection
+      this.tableName, {
+        pageIndex: this.pageIndex,
+        pageSize: this.pageSize,
+        orderBy: this.sortColumn as string,
+        direction: this.sortDirection
+      }
     ).subscribe((page: PaginatedData) => {
       this.pageData = page["pageData"];
       this.tableLength = page["tableLength"];
