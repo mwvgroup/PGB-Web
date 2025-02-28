@@ -9,7 +9,7 @@
       type="text"
     />
     <mat-autocomplete #auto="matAutocomplete">
-      @for (option of filteredOptions$ | async; track option) {
+      @for (option of filteredOptions; track option) {
         <mat-option [value]="option">
           {{ option }}
         </mat-option>

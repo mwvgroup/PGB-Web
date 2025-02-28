@@ -7,11 +7,11 @@ import { MatIcon } from "@angular/material/icon";
  * Used primarily to highlight application features or a call to action.
  *
  * Inputs:
- * - `href`: Renders the entire card as a clickable links the given location.
+ * - `title`: The card heading text.
  * - `icon`: The Material icon name to display.
- * - `title`: The heading text of the card.
  * - `description`: A brief text description displayed below the title.
  * - `action`: The text for the action link (defaults to "Learn More").
+ * - `href`: Renders the entire card as a clickable link to the given location.
  */
 @Component({
   selector: "app-feature-card",

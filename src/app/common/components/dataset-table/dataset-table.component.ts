@@ -30,12 +30,16 @@ export class DatasetTableComponent implements OnInit {
   @Input() tableName!: string;
   @Input() displayedColumns: string[] = [];
 
-  // Store the displayed data along with state information for HTML components
+  // Store the displayed data
   protected pageData: Record<string, any>[] = [];
-  protected tableLength: number = 0;
-  protected pageSizeOptions: number[] = environment.pageSizeOptions;
-  protected pageSize: number = environment.pageSizeDefault;
+  protected tableLength!: number;
+
+  // Pagination variables
   protected pageIndex: number = 0;
+  protected pageSize: number = environment.pageSizeDefault;
+  protected pageSizeOptions: number[] = environment.pageSizeOptions;
+
+  // Sorting variables
   protected sortColumn: String = "";
   protected sortDirection: "asc" | "desc" | "" = "";
 
@@ -90,7 +94,7 @@ export class DatasetTableComponent implements OnInit {
       }
     ).subscribe((page: PaginatedData) => {
       this.pageData = page["pageData"];
-      this.tableLength = this.tableLength || page["tableLength"];
+      this.tableLength = page["tableLength"];
     });
   }
 }
