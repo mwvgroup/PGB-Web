@@ -9,8 +9,8 @@ import { Schema } from "./schema.interface";
   providedIn: "root"
 })
 export class SchemaService {
-  private apiEndpoint: string = "meta/schema/";
-  private dbSchema$!: Observable<Schema>;
+  readonly dbSchema$!: Observable<Schema>;
+  private readonly apiEndpoint: string = "meta/schema/";
 
   /**
    * Instantiate an observable for the database schema fetched from the API.

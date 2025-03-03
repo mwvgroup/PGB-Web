@@ -10,13 +10,17 @@ import { PaginatedData } from "./data.interface";
   providedIn: "root"
 })
 export class DataService {
-  tableData$!: Observable<PaginatedData>;
+  private _tableData$!: Observable<PaginatedData>;
 
   /**
    * Instantiate an observable for the database schema fetched from the API.
    * The API response is automatically cached for the lifetime of the service.
    */
   constructor(private apiService: APIService) {}
+
+  get tableData$(): Observable<PaginatedData> {
+    return this._tableData$;
+  }
 
   /**
    * Returns data from a database table by name.
@@ -32,7 +36,7 @@ export class DataService {
     const url: string = `db/${tableName}/`;
     const params: HttpParams = this.buildRequestParams(options);
 
-    this.tableData$ = this.apiService.get(url, params).pipe(
+    this._tableData$ = this.apiService.get(url, params).pipe(
       map((response: HttpResponse<Object>) => ({
         pageData: response.body,
         tableLength: Number(response.headers.get("x-pagination-total"))
