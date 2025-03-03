@@ -7,8 +7,8 @@ import { of } from "rxjs";
 import { catchError } from "rxjs/operators";
 
 import { environment } from "~environments/environment";
-import { PaginatedData } from "~services/data/data.interface";
 import { DataService } from "~services/data/data.service";
+import { SchemaService } from "~services/schema/schema.service";
 
 /**
  * Provides a tabular view for a project dataset with support for pagination,
@@ -43,7 +43,7 @@ export class DatasetTableComponent implements OnInit {
   protected sortColumn: String = "";
   protected sortDirection: "asc" | "desc" | "" = "";
 
-  constructor(private dataService: DataService) {}
+  constructor(private schemaService: SchemaService, private dataService: DataService) {}
 
   ngOnInit() {
     this.fetchTableColumns();
@@ -72,7 +72,7 @@ export class DatasetTableComponent implements OnInit {
 
   /** Fetches the table schema to determine the columns to display. */
   private fetchTableColumns(): void {
-    this.dataService.getColumnNames(this.tableName)
+    this.schemaService.getColumnNames(this.tableName)
     .pipe(
       catchError(() => of([]))
     )
@@ -85,16 +85,13 @@ export class DatasetTableComponent implements OnInit {
    * Fetches table data from the API based on the current pagination/ordering criteria.
    */
   private fetchTableData(): void {
-    this.dataService.getTableData(
+    this.dataService.fetchTableData(
       this.tableName, {
         pageIndex: this.pageIndex,
         pageSize: this.pageSize,
         orderBy: this.sortColumn as string,
         direction: this.sortDirection
       }
-    ).subscribe((page: PaginatedData) => {
-      this.pageData = page["pageData"];
-      this.tableLength = page["tableLength"];
-    });
+    );
   }
 }
