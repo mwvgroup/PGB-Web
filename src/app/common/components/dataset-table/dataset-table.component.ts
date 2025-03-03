@@ -3,12 +3,10 @@ import { MatCard } from "@angular/material/card";
 import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { MatSortModule, Sort } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
-import { of } from "rxjs";
-import { catchError } from "rxjs/operators";
 
 import { environment } from "~environments/environment";
-import { PaginatedData } from "~services/data/data.interface";
 import { DataService } from "~services/data/data.service";
+import { SchemaService } from "~services/schema/schema.service";
 
 /**
  * Provides a tabular view for a project dataset with support for pagination,
@@ -43,10 +41,19 @@ export class DatasetTableComponent implements OnInit {
   protected sortColumn: String = "";
   protected sortDirection: "asc" | "desc" | "" = "";
 
-  constructor(private dataService: DataService) {}
+  constructor(private schemaService: SchemaService, private dataService: DataService) {}
 
+  /** Connects UI elements to backend services and loads table data from the API. */
   ngOnInit() {
-    this.fetchTableColumns();
+    this.schemaService.getColumnNames(this.tableName).subscribe(
+      (columns: string[]) => this.displayedColumns = columns
+    );
+
+    this.dataService.tableData$.subscribe(data => {
+      this.pageData = data?.pageData || [];
+      this.tableLength = data?.tableLength || 0;
+    });
+
     this.fetchTableData();
   }
 
@@ -70,31 +77,15 @@ export class DatasetTableComponent implements OnInit {
     this.fetchTableData();
   }
 
-  /** Fetches the table schema to determine the columns to display. */
-  private fetchTableColumns(): void {
-    this.dataService.getColumnNames(this.tableName)
-    .pipe(
-      catchError(() => of([]))
-    )
-    .subscribe(
-      (columns: string[]) => this.displayedColumns = columns
-    );
-  }
-
-  /**
-   * Fetches table data from the API based on the current pagination/ordering criteria.
-   */
+  /**  Fetches table data from the API based on the current pagination/ordering criteria. */
   private fetchTableData(): void {
-    this.dataService.getTableData(
+    this.dataService.fetchTableData(
       this.tableName, {
         pageIndex: this.pageIndex,
         pageSize: this.pageSize,
         orderBy: this.sortColumn as string,
         direction: this.sortDirection
       }
-    ).subscribe((page: PaginatedData) => {
-      this.pageData = page["pageData"];
-      this.tableLength = page["tableLength"];
-    });
+    );
   }
 }

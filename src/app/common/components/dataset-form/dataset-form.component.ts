@@ -4,7 +4,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 
-import { DataService } from "~services/data/data.service";
+import { SchemaService } from "~services/schema/schema.service";
 import { DatasetFormInterface } from "./dataset-form.interface";
 
 /**
@@ -30,7 +30,7 @@ export class DatasetFormComponent implements OnInit {
   protected allOptions: string[] = [];
   protected filteredOptions: string[] = [];
 
-  constructor(private dataService: DataService) {}
+  constructor(private schemaService: SchemaService) {}
 
   /** Loads valid table names and set up form controls. */
   ngOnInit(): void {
@@ -47,7 +47,7 @@ export class DatasetFormComponent implements OnInit {
 
   /** Fetches valid table names from the API. */
   private initializeOptions(): void {
-    this.dataService.getTableNames().subscribe(
+    this.schemaService.getTableNames().subscribe(
       names => {
         this.allOptions = names;
         this.filteredOptions = [...this.allOptions];
