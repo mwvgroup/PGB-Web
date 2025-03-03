@@ -43,18 +43,16 @@ export class DatasetTableComponent implements OnInit {
 
   constructor(private schemaService: SchemaService, private dataService: DataService) {}
 
-  /** Connects UI elements to backend services and loads table data from the API. */
+  /** Connects UI elements to backend services. */
   ngOnInit() {
     this.schemaService.getColumnNames(this.tableName).subscribe(
       (columns: string[]) => this.displayedColumns = columns
     );
 
-    this.dataService.tableData$.subscribe(data => {
+    this.dataService.getTableData(this.tableName).subscribe(data => {
       this.pageData = data?.pageData || [];
       this.tableLength = data?.tableLength || 0;
     });
-
-    this.fetchTableData();
   }
 
   /**
@@ -64,7 +62,7 @@ export class DatasetTableComponent implements OnInit {
   protected updateSorting($event: Sort) {
     this.sortColumn = $event.active;
     this.sortDirection = $event.direction;
-    this.fetchTableData();
+    this.updateTableData();
   }
 
   /**
@@ -74,12 +72,12 @@ export class DatasetTableComponent implements OnInit {
   protected updatePagination($event: PageEvent) {
     this.pageSize = $event.pageSize;
     this.pageIndex = $event.pageIndex;
-    this.fetchTableData();
+    this.updateTableData();
   }
 
   /**  Fetches table data from the API based on the current pagination/ordering criteria. */
-  private fetchTableData(): void {
-    this.dataService.fetchTableData(
+  private updateTableData(): void {
+    this.dataService.refreshTableData(
       this.tableName, {
         pageIndex: this.pageIndex,
         pageSize: this.pageSize,

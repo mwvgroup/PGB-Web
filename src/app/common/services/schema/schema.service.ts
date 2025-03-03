@@ -9,7 +9,7 @@ import { Schema } from "./schema.interface";
   providedIn: "root"
 })
 export class SchemaService {
-  readonly dbSchema$!: Observable<Schema>;
+  private readonly dbSchema$!: Observable<Schema>;
   private readonly apiEndpoint: string = "meta/schema/";
 
   /**
@@ -25,7 +25,7 @@ export class SchemaService {
 
   /**
    * Returns a list of table names from the database.
-   * @returns An observable containing the database schema.
+   * @returns An observable containing database table names.
    */
   getTableNames(): Observable<string[]> {
     return this.dbSchema$.pipe(

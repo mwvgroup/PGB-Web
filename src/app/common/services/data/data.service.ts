@@ -3,54 +3,66 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, map, tap } from "rxjs";
 
 import { APIService } from "~services/api/api.service";
-import { PaginatedData } from "./data.interface";
+import { PaginatedData, PaginatedOptions } from "./data.interface";
 
 /** Service for fetching data from the application database via the API. */
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class DataService {
-  tableData$: BehaviorSubject<PaginatedData | null> = new BehaviorSubject<PaginatedData | null>(null);
+  private tableData$ = new BehaviorSubject<PaginatedData | null>(null);
 
   constructor(private apiService: APIService) {}
+
+  /**
+   * Retrieves the table data as an observable and triggers a fetch request.
+   * @param tableName The name of the table to fetch data from.
+   * @param options Pagination/ordering settings for the returned data.
+   * @returns A BehaviorSubject containing the table data.
+   */
+  getTableData(tableName: string, options: PaginatedOptions = {}): BehaviorSubject<PaginatedData | null> {
+    this.refreshTableData(tableName, options);
+    return this.tableData$;
+  }
 
   /**
    * Fetches data from a database table by name and updates subscribers.
    * @param tableName The name of the table to fetch data from.
    * @param options Pagination/ordering settings for the returned data.
    */
-  fetchTableData(
-    tableName: string,
-    options: { pageIndex?: number; pageSize?: number; orderBy?: string; direction?: string } = {}
-  ): void {
-    const url: string = `db/${tableName}/`;
-    const params: HttpParams = this.buildRequestParams(options);
-
-    this.apiService.get(url, params).pipe(
-      map((response: HttpResponse<Object>) => ({
-        pageData: response.body,
-        tableLength: Number(response.headers.get("x-pagination-total"))
-      })),
-      tap((data) => this.tableData$.next(data))
+  refreshTableData(tableName: string, options: PaginatedOptions = {}): void {
+    const params: HttpParams = this.buildHttpParams(options);
+    this.apiService.get(`db/${tableName}/`, params).pipe(
+      map((response: HttpResponse<Object>) => this.transformResponse(response)),
+      tap((data: PaginatedData) => this.tableData$.next(data))
     ).subscribe();
   }
 
   /**
-   * Generates HTTP query parameters for paginated data requests.
-   * @param options Pagination/ordering settings.
-   * @returns HTTP query parameters suitable for paginating data.
+   * Builds HTTP parameters for API requests based on pagination and sorting options.
+   * @param options Pagination/ordering settings for the request.
+   * @returns A HttpParams object with the appropriate query parameters.
    */
-  private buildRequestParams(options: { pageIndex?: number; pageSize?: number; orderBy?: string; direction?: string }) {
-    const {pageIndex = 0, pageSize = 0, orderBy, direction} = options;
-    let params: HttpParams = new HttpParams({
-      fromObject: {
-        _offset_: pageIndex * pageSize,
-        _limit_: pageSize
-      }
-    });
+  private buildHttpParams({pageIndex = 0, pageSize = 0, orderBy, direction}: PaginatedOptions): HttpParams {
+    let params = new HttpParams()
+      .set("_offset_", (pageIndex * pageSize).toString())
+      .set("_limit_", pageSize.toString());
 
     if (orderBy) params = params.set("_order_by_", orderBy);
     if (direction) params = params.set("_direction_", direction);
+
     return params;
+  }
+
+  /**
+   * Transforms the HTTP response into a structured PaginatedData object.
+   * @param response The HTTP response from the API.
+   * @returns The transformed PaginatedData object.
+   */
+  private transformResponse(response: HttpResponse<Object>): PaginatedData {
+    return {
+      pageData: response.body,
+      tableLength: Number(response.headers.get("x-pagination-total")),
+    };
   }
 }

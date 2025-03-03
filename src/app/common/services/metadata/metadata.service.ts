@@ -10,7 +10,7 @@ import { AppMeta } from "./metadata.interface";
   providedIn: "root"
 })
 export class MetadataService {
-  readonly appMetadata$!: Observable<AppMeta>;
+  private readonly appMetadata$!: Observable<AppMeta>;
   private readonly apiEndpoint: string = "meta/app/";
 
   /**
