@@ -3,8 +3,6 @@ import { MatCard } from "@angular/material/card";
 import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { MatSortModule, Sort } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
-import { of } from "rxjs";
-import { catchError } from "rxjs/operators";
 
 import { environment } from "~environments/environment";
 import { DataService } from "~services/data/data.service";
@@ -45,14 +43,18 @@ export class DatasetTableComponent implements OnInit {
 
   constructor(private schemaService: SchemaService, private dataService: DataService) {}
 
+  /** Connects UI elements to backend services and loads table data from the API. */
   ngOnInit() {
-    this.fetchTableColumns();
-    this.fetchTableData();
+    this.schemaService.getColumnNames(this.tableName).subscribe(
+      (columns: string[]) => this.displayedColumns = columns
+    );
 
     this.dataService.tableData$.subscribe(data => {
       this.pageData = data?.pageData || [];
       this.tableLength = data?.tableLength || 0;
     });
+
+    this.fetchTableData();
   }
 
   /**
@@ -75,20 +77,7 @@ export class DatasetTableComponent implements OnInit {
     this.fetchTableData();
   }
 
-  /** Fetches the table schema to determine the columns to display. */
-  private fetchTableColumns(): void {
-    this.schemaService.getColumnNames(this.tableName)
-    .pipe(
-      catchError(() => of([]))
-    )
-    .subscribe(
-      (columns: string[]) => this.displayedColumns = columns
-    );
-  }
-
-  /**
-   * Fetches table data from the API based on the current pagination/ordering criteria.
-   */
+  /**  Fetches table data from the API based on the current pagination/ordering criteria. */
   private fetchTableData(): void {
     this.dataService.fetchTableData(
       this.tableName, {
