@@ -6,6 +6,6 @@
 </mat-button-toggle-group>
 
 <mat-menu #menu>
-  <button mat-menu-item>CSV</button>
-  <button mat-menu-item>JSON</button>
+  <button mat-menu-item (click)="handleCSV()">CSV</button>
+  <button mat-menu-item (click)="handleJSON()">JSON</button>
 </mat-menu>

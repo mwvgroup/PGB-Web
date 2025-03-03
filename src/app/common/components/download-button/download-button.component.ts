@@ -3,6 +3,7 @@ import { MatButton } from "@angular/material/button";
 import { MatButtonToggleGroup } from "@angular/material/button-toggle";
 import { MatIcon } from "@angular/material/icon";
 import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
+import { DataService } from "~services/data/data.service";
 
 @Component({
   selector: "app-download-button",
@@ -16,4 +17,15 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
     MatMenuTrigger
   ]
 })
-export class DownloadButtonComponent {}
+export class DownloadButtonComponent {
+
+  constructor(private dataService: DataService) {}
+
+  handleCSV(): void {
+    console.log("DownloadButtonComponent handleCSV");
+  }
+
+  handleJSON(): void {
+    console.log("DownloadButtonComponent handleJSON");
+  }
+}
