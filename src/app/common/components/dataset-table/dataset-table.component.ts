@@ -49,8 +49,8 @@ export class DatasetTableComponent implements OnInit {
       (columns: string[]) => this.displayedColumns = columns
     );
 
-    this.dataService.refreshTableData(this.tableName)
-    this.dataService.getTableData().subscribe(data => {
+    this.dataService.fetchTableData(this.tableName)
+    this.dataService.tableData$.subscribe(data => {
       this.pageData = data?.pageData || [];
       this.tableLength = data?.tableLength || 0;
     });
@@ -78,7 +78,7 @@ export class DatasetTableComponent implements OnInit {
 
   /**  Fetches table data from the API based on the current pagination/ordering criteria. */
   private updateTableData(): void {
-    this.dataService.refreshTableData(
+    this.dataService.fetchTableData(
       this.tableName, {
         pageIndex: this.pageIndex,
         pageSize: this.pageSize,

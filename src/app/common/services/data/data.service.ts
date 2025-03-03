@@ -10,26 +10,16 @@ import { PaginatedData, PaginatedOptions } from "./data.interface";
   providedIn: "root",
 })
 export class DataService {
-  private tableData$ = new BehaviorSubject<PaginatedData | null>(null);
+  tableData$ = new BehaviorSubject<PaginatedData | null>(null);
 
   constructor(private apiService: APIService) {}
 
   /**
-   * Retrieves the table data as an observable and triggers a fetch request.
-   * @param tableName The name of the table to fetch data from.
-   * @param options Pagination/ordering settings for the returned data.
-   * @returns A BehaviorSubject containing the table data.
-   */
-  getTableData(): BehaviorSubject<PaginatedData | null> {
-    return this.tableData$;
-  }
-
-  /**
-   * Fetches data from a database table by name and updates subscribers.
+   * Fetches data from a database table and updates subscribers.
    * @param tableName The name of the table to fetch data from.
    * @param options Pagination/ordering settings for the returned data.
    */
-  refreshTableData(tableName: string, options: PaginatedOptions = {}): void {
+  fetchTableData(tableName: string, options: PaginatedOptions = {}): void {
     const params: HttpParams = this.buildHttpParams(options);
     this.apiService.get(`db/${tableName}/`, params).pipe(
       map((response: HttpResponse<Object>) => this.transformResponse(response)),

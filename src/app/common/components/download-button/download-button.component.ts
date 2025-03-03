@@ -22,53 +22,40 @@ export class DownloadButtonComponent {
   constructor(private renderer: Renderer2, private dataService: DataService) {}
 
   handleCSV(): void {
-    this.dataService.getTableData().subscribe((data) => {
+    this.dataService.tableData$.subscribe((data) => {
       if (data && data.pageData) {
-        // Convert JSON to CSV
-        const csvData = this.convertToCSV(data.pageData);
-
-        // Create a blob for the CSV data
-        const blob = new Blob([csvData], {type: "text/csv"});
-
-        // Create a download link
-        const link = this.renderer.createElement("a");
-        link.setAttribute("target", "_self");
-        link.setAttribute("href", URL.createObjectURL(blob));
-        link.setAttribute("download", `pg_broker.csv`);
-
-        // Trigger download and cleanup
-        link.click();
-        link.remove();
+        const content: string = this.convertToCSV(data.pageData);
+        this.triggerDownload(content, "text/csv", "pg_broker.csv");
       }
     });
   }
 
   handleJSON(): void {
-    this.dataService.getTableData().subscribe((data) => {
+    this.dataService.tableData$.subscribe((data) => {
       if (data) {
-        // Format the data for download
-        const jsonStr = JSON.stringify(data.pageData, null, 2);
-        const blob = new Blob([jsonStr], {type: "application/json"});
-
-        // Create a download link
-        const link = this.renderer.createElement("a");
-        link.setAttribute("target", "_self");
-        link.setAttribute("href", URL.createObjectURL(blob));
-        link.setAttribute("download", `pg_broker.json`);
-
-        // Trigger download and cleanup
-        link.click();
-        link.remove();
+        const content: string = JSON.stringify(data, null, 2);
+        this.triggerDownload(content, "application/json", "pg_broker.json");
       }
     });
   }
 
   private convertToCSV(data: any[]): string {
-    const header = Object.keys(data[0]);
-    const rows = data.map(item => header.map(fieldName => JSON.stringify(item[fieldName], (key, value) =>
+    const header: string[] = Object.keys(data[0]);
+    const rows: string[] = data.map(item => header.map(fieldName => JSON.stringify(item[fieldName], (key, value) =>
       value === null ? "" : value // Handle null values
     )).join(","));
 
     return [header.join(","), ...rows].join("\r\n");
+  }
+
+  private triggerDownload(content: string, type: string, filename: string): void {
+    const blob = new Blob([content], {type});
+    const link: HTMLAnchorElement = this.renderer.createElement("a");
+
+    link.setAttribute("target", "_self");
+    link.setAttribute("href", URL.createObjectURL(blob));
+    link.setAttribute("download", filename);
+    link.click();
+    link.remove();
   }
 }
