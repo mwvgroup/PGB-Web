@@ -49,7 +49,8 @@ export class DatasetTableComponent implements OnInit {
       (columns: string[]) => this.displayedColumns = columns
     );
 
-    this.dataService.getTableData(this.tableName).subscribe(data => {
+    this.dataService.refreshTableData(this.tableName)
+    this.dataService.getTableData().subscribe(data => {
       this.pageData = data?.pageData || [];
       this.tableLength = data?.tableLength || 0;
     });

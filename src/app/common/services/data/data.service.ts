@@ -20,8 +20,7 @@ export class DataService {
    * @param options Pagination/ordering settings for the returned data.
    * @returns A BehaviorSubject containing the table data.
    */
-  getTableData(tableName: string, options: PaginatedOptions = {}): BehaviorSubject<PaginatedData | null> {
-    this.refreshTableData(tableName, options);
+  getTableData(): BehaviorSubject<PaginatedData | null> {
     return this.tableData$;
   }
 
