@@ -48,6 +48,11 @@ export class DatasetTableComponent implements OnInit {
   ngOnInit() {
     this.fetchTableColumns();
     this.fetchTableData();
+
+    this.dataService.tableData$.subscribe(data => {
+      this.pageData = data?.pageData || [];
+      this.tableLength = data?.tableLength || 0;
+    });
   }
 
   /**

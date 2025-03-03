@@ -108,6 +108,6 @@ export class APIService {
    * @param error The error response.
    */
   private handleError(error: HttpErrorResponse): Observable<never> {
-    return throwError(() => new Error("An error occurred while processing the request."));
+    return throwError(() => error);
   }
 }

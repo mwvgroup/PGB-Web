@@ -1,6 +1,6 @@
 import { HttpParams, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map, Observable } from "rxjs";
+import { BehaviorSubject, map, tap } from "rxjs";
 
 import { APIService } from "~services/api/api.service";
 import { PaginatedData } from "./data.interface";
@@ -10,38 +10,29 @@ import { PaginatedData } from "./data.interface";
   providedIn: "root"
 })
 export class DataService {
-  private _tableData$!: Observable<PaginatedData>;
+  tableData$: BehaviorSubject<PaginatedData | null> = new BehaviorSubject<PaginatedData | null>(null);
 
-  /**
-   * Instantiate an observable for the database schema fetched from the API.
-   * The API response is automatically cached for the lifetime of the service.
-   */
   constructor(private apiService: APIService) {}
 
-  get tableData$(): Observable<PaginatedData> {
-    return this._tableData$;
-  }
-
   /**
-   * Returns data from a database table by name.
+   * Fetches data from a database table by name and updates subscribers.
    * @param tableName The name of the table to fetch data from.
    * @param options Pagination/ordering settings for the returned data.
-   * @returns An observable containing table data.
    */
   fetchTableData(
     tableName: string,
     options: { pageIndex?: number; pageSize?: number; orderBy?: string; direction?: string } = {}
   ): void {
-
     const url: string = `db/${tableName}/`;
     const params: HttpParams = this.buildRequestParams(options);
 
-    this._tableData$ = this.apiService.get(url, params).pipe(
+    this.apiService.get(url, params).pipe(
       map((response: HttpResponse<Object>) => ({
         pageData: response.body,
         tableLength: Number(response.headers.get("x-pagination-total"))
-      }))
-    );
+      })),
+      tap((data) => this.tableData$.next(data))
+    ).subscribe();
   }
 
   /**
