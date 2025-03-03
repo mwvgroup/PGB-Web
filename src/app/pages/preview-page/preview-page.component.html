@@ -1,7 +1,10 @@
 <app-content-section>
   <div class="page-title-section">
     <h1>{{ tableName }}</h1>
-    <app-download-button/>
+
+    @if (tableHasData) {
+      <app-download-button/>
+    }
   </div>
 
   <app-dataset-view-table [tableName]="tableName"/>

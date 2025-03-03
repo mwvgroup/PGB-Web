@@ -3,11 +3,10 @@ import { MatButton } from "@angular/material/button";
 import { MatButtonToggleGroup } from "@angular/material/button-toggle";
 import { MatIcon } from "@angular/material/icon";
 import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
+import { PaginatedData } from "~services/data/data.interface";
 import { DataService } from "~services/data/data.service";
 
-/**
- * Download button with support for data in different formats (CSV, JSON).
- */
+/** Download button with support for data in different formats (CSV, JSON). */
 @Component({
   selector: "app-download-button",
   templateUrl: "download-button.component.html",
@@ -21,35 +20,28 @@ import { DataService } from "~services/data/data.service";
   ]
 })
 export class DownloadButtonComponent {
+  private tableData: PaginatedData | null = null;
 
-  constructor(private renderer: Renderer2, private dataService: DataService) {}
-
-  /**
-   * Handles the CSV download action.
-   * Subscribes to the data service and converts the fetched data into CSV format
-   * before triggering the download.
-   */
-  handleCSV(): void {
-    this.dataService.tableData$.subscribe((data) => {
-      if (data && data.pageData) {
-        const content: string = this.convertToCSV(data.pageData);
-        this.triggerDownload(content, "text/csv", "pg_broker.csv");
-      }
+  constructor(private renderer: Renderer2, private dataService: DataService) {
+    this.dataService.tableData$.subscribe(data => {
+      this.tableData = data;
     });
   }
 
-  /**
-   * Handles the JSON download action.
-   * Subscribes to the data service and converts the fetched data into JSON format
-   * before triggering the download.
-   */
+  /** Triggers a CSV file download using the stored table data. */
+  handleCSV(): void {
+    if (this.tableData && this.tableData.pageData) {
+      const content: string = this.convertToCSV(this.tableData.pageData);
+      this.triggerDownload(content, "text/csv", "pg_broker.csv");
+    }
+  }
+
+  /** Triggers a JSON file download using the stored table data. */
   handleJSON(): void {
-    this.dataService.tableData$.subscribe((data) => {
-      if (data) {
-        const content: string = JSON.stringify(data, null, 2);
-        this.triggerDownload(content, "application/json", "pg_broker.json");
-      }
-    });
+    if (this.tableData && this.tableData.pageData) {
+      const content: string = JSON.stringify(this.tableData, null, 2);
+      this.triggerDownload(content, "application/json", "pg_broker.json");
+    }
   }
 
   /**
