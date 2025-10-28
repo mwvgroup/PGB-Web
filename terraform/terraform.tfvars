@@ -1,0 +1,5 @@
+project_id   = "avid-heading-329016"
+service_name = "pgb-web"
+region       = "us-central1"
+api_image    = "ghcr.io/better-hpc/auto-rest:v0.1.10"
+proxy_image  = "docker.io/nginx:1.29.2"
