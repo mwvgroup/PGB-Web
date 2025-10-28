@@ -4,7 +4,7 @@ provider "google" {
 
 locals {
   api_image_full = "${var.region}-docker.pkg.dev/${var.project_id}/web-artifacts/auto-rest:${var.api_version}"
-  description    = "Fully qualified image path for the API container, including the version tag"
+  proxy_image_full = "${var.region}-docker.pkg.dev/${var.project_id}/web-artifacts/nginx:${var.proxy_version}"
 }
 
 resource "google_artifact_registry_repository" "web-artifacts" {
@@ -16,7 +16,6 @@ resource "google_artifact_registry_repository" "web-artifacts" {
   cleanup_policies {
     id          = "keep-recent"
     action      = "KEEP"
-    description = "Retains only the 5 most recent image versions to manage storage usage"
     most_recent_versions {
       keep_count = 5
     }
@@ -32,7 +31,6 @@ resource "google_cloud_run_v2_service" "default" {
   template {
     containers {
       name        = "pgb-web-api"
-      description = "Backend REST API for the broker website"
       image       = local.api_image_full
       depends_on  = ["pgb-web-proxy"]
       ports {
@@ -42,8 +40,7 @@ resource "google_cloud_run_v2_service" "default" {
 
     containers {
       name        = "pgb-web-proxy"
-      description = "NGINX sidecar container routing incoming site traffic"
-      image       = var.proxy_image
+      image       = local.proxy_image_full
       startup_probe {
         http_get {
           path = "/"

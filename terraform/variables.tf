@@ -18,7 +18,7 @@ variable "api_version" {
   description = "Auto-REST application version to deploy"
 }
 
-variable "proxy_image" {
+variable "proxy_version" {
   type        = string
-  description = "Nginx container image to deploy"
+  description = "Nginx proxy version to deploy"
 }
