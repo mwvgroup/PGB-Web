@@ -3,7 +3,7 @@ provider "google" {
 }
 
 locals {
-  api_image_full = "${var.region}-docker.pkg.dev/${var.project_id}/web-artifacts/auto-rest:${var.api_version}"
+  api_image_full   = "${var.region}-docker.pkg.dev/${var.project_id}/web-artifacts/auto-rest:${var.api_version}"
   proxy_image_full = "${var.region}-docker.pkg.dev/${var.project_id}/web-artifacts/nginx:${var.proxy_version}"
 }
 
@@ -14,8 +14,8 @@ resource "google_artifact_registry_repository" "web-artifacts" {
   description   = "Docker artifact registry for hosting images used by the broker website"
 
   cleanup_policies {
-    id          = "keep-recent"
-    action      = "KEEP"
+    id     = "keep-recent"
+    action = "KEEP"
     most_recent_versions {
       keep_count = 5
     }
@@ -23,24 +23,25 @@ resource "google_artifact_registry_repository" "web-artifacts" {
 }
 
 resource "google_cloud_run_v2_service" "default" {
-  name        = var.service_name
-  location    = var.region
-  client      = "terraform"
-  description = "Cloud Run service encapsulating the full application container stack"
+  name                = var.service_name
+  location            = var.region
+  deletion_protection = false
+  client              = "terraform"
+  description         = "Cloud Run service encapsulating the full application container stack"
 
   template {
     containers {
-      name        = "pgb-web-api"
-      image       = local.api_image_full
-      depends_on  = ["pgb-web-proxy"]
+      name       = "pgb-web-api"
+      image      = local.api_image_full
+      depends_on = ["pgb-web-proxy"]
       ports {
         container_port = 8081
       }
     }
 
     containers {
-      name        = "pgb-web-proxy"
-      image       = local.proxy_image_full
+      name  = "pgb-web-proxy"
+      image = local.proxy_image_full
       startup_probe {
         http_get {
           path = "/"
