@@ -2,6 +2,11 @@ provider "google" {
   project = var.project_id
 }
 
+# Construct full image path for the auto-rest image in Artifact Registry
+locals {
+  api_image_full = "${var.region}-docker.pkg.dev/${var.project_id}/web-artifacts/auto-rest:${var.api_version}"
+}
+
 resource "google_artifact_registry_repository" "web-artifacts" {
   location      = var.region
   repository_id = "web-artifacts"
@@ -16,7 +21,6 @@ resource "google_artifact_registry_repository" "web-artifacts" {
   }
 }
 
-
 resource "google_cloud_run_v2_service" "default" {
   name     = var.service_name
   location = var.region
@@ -25,7 +29,7 @@ resource "google_cloud_run_v2_service" "default" {
   template {
     containers {
       name       = "pgb-web-api"
-      image      = var.api_image
+      image      = local.api_image_full
       depends_on = ["pgb-web-proxy"]
       ports {
         container_port = 8081

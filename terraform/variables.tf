@@ -13,9 +13,9 @@ variable "region" {
   description = "Deployment region"
 }
 
-variable "api_image" {
+variable "api_version" {
   type        = string
-  description = "API container image to deploy"
+  description = "Auto-REST application version to deploy"
 }
 
 variable "proxy_image" {
