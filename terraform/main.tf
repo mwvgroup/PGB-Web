@@ -37,11 +37,10 @@ resource "null_resource" "mirror_images" {
       # Authenticate Docker to Artifact Registry
       gcloud auth configure-docker ${var.region}-docker.pkg.dev
 
-      # Pull public images
+      # Pull public images as amd64
       echo "Pulling remote images..."
-      docker pull ${local.api_image_public}
-      echo "Pulling nginx..."
-      docker pull ${local.proxy_image_public}
+      docker pull --platform=linux/amd64 ${local.api_image_public}
+      docker pull --platform=linux/amd64 ${local.proxy_image_public}
 
       # Tag for Artifact Registry
       echo "Assigning new image tags..."
@@ -49,13 +48,13 @@ resource "null_resource" "mirror_images" {
       docker tag ${local.proxy_image_public} ${local.proxy_image_artifact}
 
       echo "Pushing images to artifact registry..."
-      # Push to Artifact Registry
       docker push ${local.api_image_artifact}
       docker push ${local.proxy_image_artifact}
     EOT
     interpreter = ["/bin/bash", "-c"]
   }
 }
+
 
 resource "google_cloud_run_v2_service" "default" {
   name                = var.service_name
@@ -67,9 +66,8 @@ resource "google_cloud_run_v2_service" "default" {
 
   template {
     containers {
-      name       = "proxy"
-      image      = local.proxy_image_artifact
-      depends_on = ["api"]
+      name  = "proxy"
+      image = local.proxy_image_artifact
       ports {
         container_port = 80
       }
@@ -78,6 +76,11 @@ resource "google_cloud_run_v2_service" "default" {
     containers {
       name  = "api"
       image = local.api_image_artifact
+      args = [
+        "--sqlite",
+        "--db-name",
+        "temp",
+      ]
     }
   }
 
