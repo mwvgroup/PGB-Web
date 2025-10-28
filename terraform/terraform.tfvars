@@ -1,5 +1,5 @@
 project_id   = "avid-heading-329016"
-service_name = "pgb-web"
 region       = "us-central1"
+service_name = "pgb-web"
+proxy_version  = "1.29.2"
 api_version    = "0.1.10"
-proxy_version  = "docker.io/nginx:1.29.2"
