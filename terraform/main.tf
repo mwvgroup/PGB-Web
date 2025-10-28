@@ -67,28 +67,20 @@ resource "google_cloud_run_v2_service" "default" {
 
   template {
     containers {
-      name       = "pgb-web-api"
-      image      = local.api_image_artifact
-      depends_on = ["pgb-web-proxy"]
+      name       = "proxy"
+      image      = local.proxy_image_artifact
+      depends_on = ["api"]
       ports {
-        container_port = 8081
+        container_port = 80
       }
     }
 
     containers {
-      name  = "pgb-web-proxy"
-      image = local.proxy_image_artifact
-      startup_probe {
-        http_get {
-          path = "/"
-          port = 80
-        }
-        initial_delay_seconds = 5
-        period_seconds        = 5
-        failure_threshold     = 10
-      }
+      name  = "api"
+      image = local.api_image_artifact
     }
   }
+
 }
 
 resource "google_cloud_run_v2_service_iam_member" "noauth" {
