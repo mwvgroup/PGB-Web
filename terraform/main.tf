@@ -12,11 +12,12 @@ locals {
   proxy_image_artifact = "${var.region}-docker.pkg.dev/${var.project_id}/web-artifacts/nginx:${var.proxy_version}"
 }
 
+# Create an Artifact Registry repository for storing Docker images
 resource "google_artifact_registry_repository" "web_registry" {
   location      = var.region
   repository_id = "web-artifacts"
   format        = "docker"
-  description   = "Docker artifact registry for hosting images used by the broker website"
+  description   = "Docker artifact repository for hosting images used by the broker website"
 
   cleanup_policies {
     id     = "keep-recent"
@@ -27,7 +28,8 @@ resource "google_artifact_registry_repository" "web_registry" {
   }
 }
 
-# Mirror images to Artifact Registry
+# Mirror public images to Artifact Registry for consistent availability and reduced external dependencies
+# This ensures images are pulled from GCP-managed storage rather than external registries
 resource "null_resource" "mirror_images" {
   depends_on = [google_artifact_registry_repository.web_registry]
   provisioner "local-exec" {
@@ -55,7 +57,7 @@ resource "null_resource" "mirror_images" {
   }
 }
 
-
+# Deploy a multi-container Cloud Run service with proxy and API containers
 resource "google_cloud_run_v2_service" "default" {
   name                = var.service_name
   depends_on          = [null_resource.mirror_images]
@@ -65,6 +67,7 @@ resource "google_cloud_run_v2_service" "default" {
   description         = "Cloud Run service encapsulating the full application container stack"
 
   template {
+    # Nginx proxy container handling external traffic
     containers {
       name  = "proxy"
       image = local.proxy_image_artifact
@@ -73,6 +76,7 @@ resource "google_cloud_run_v2_service" "default" {
       }
     }
 
+    # API container running the REST API
     containers {
       name  = "api"
       image = local.api_image_artifact
@@ -83,9 +87,9 @@ resource "google_cloud_run_v2_service" "default" {
       ]
     }
   }
-
 }
 
+# Allow unauthenticated public access to the Cloud Run service
 resource "google_cloud_run_v2_service_iam_member" "noauth" {
   location = google_cloud_run_v2_service.default.location
   name     = google_cloud_run_v2_service.default.name
