@@ -1,0 +1,5 @@
+project_id   = "avid-heading-329016"
+region       = "us-central1"
+service_name = "pgb-web"
+proxy_version  = "1.29.2"
+api_version    = "0.1.10"
